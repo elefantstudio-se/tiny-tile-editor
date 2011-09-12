@@ -18,6 +18,8 @@ using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
+using Tiny_Tile_Editor.Tiles;
+
 namespace Tiny_Tile_Editor
 {
     public class TileLayer
@@ -68,6 +70,14 @@ namespace Tiny_Tile_Editor
             }
         }
 
+        public int TilesetTileWidth
+        {
+            get
+            {
+                return tileset.Width / tileSize;
+            }
+        }
+
         public TileLayer(Texture2D tileset, int width, int height, int tileSize)
         {
             this.tileset = tileset;
@@ -86,10 +96,6 @@ namespace Tiny_Tile_Editor
             height = layer.height;
             tileSize = layer.tileSize;
             tiles = new Tile[height, width];
-
-            // Because the tiles are of type Rectangle, and thus a reference type, we have to manually copy over every tile.
-            // This is necessary because otherwise the two tiles would reference the same area in memory.
-            // Changing one would change the other.
 
             Array.Copy(layer.tiles, tiles, width * height);
         }
@@ -145,7 +151,23 @@ namespace Tiny_Tile_Editor
         {
             for (int x = 0; x < width; x++)
                 for (int y = 0; y < height; y++)
-                    SetTile(x, y, new Tile(Tile.Type.Empty));
+                    SetTile(x, y, new EmptyTile());
+        }
+
+        public void ClearTileType(int value)
+        {
+            for (int x = 0; x < width; x++)
+                for (int y = 0; y < height; y++)
+                    if (GetTile(x, y).Value == value)
+                        SetTile(x, y, new EmptyTile());
+        }
+
+        public void ReplaceTileType(int value, TileType newTileType)
+        {
+            for (int x = 0; x < width; x++)
+                for (int y = 0; y < height; y++)
+                    if (GetTile(x, y).Value == value)
+                        SetTile(x, y, new CustomTile(newTileType));
         }
 
         private void ResizeLayer(int layerWidth, int layerHeight)
@@ -154,7 +176,7 @@ namespace Tiny_Tile_Editor
 
             for (int x = 0; x < layerWidth; x++)
                 for (int y = 0; y < layerHeight; y++)
-                    newTiles[y, x] = (x >= width) || (y >= height) ? new Tile(Tile.Type.Empty) : tiles[y, x];
+                    newTiles[y, x] = (x >= width) || (y >= height) ? new EmptyTile() : tiles[y, x];
 
             tiles = newTiles;
         }

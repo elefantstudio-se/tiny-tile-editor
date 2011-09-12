@@ -104,6 +104,15 @@ namespace Tiny_Tile_Editor.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Information.
+        /// </summary>
+        internal static string Caption_Information {
+            get {
+                return ResourceManager.GetString("Caption_Information", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Status.
         /// </summary>
         internal static string Caption_Status {
@@ -147,6 +156,13 @@ namespace Tiny_Tile_Editor.Properties {
         internal static System.Drawing.Bitmap clear_map {
             get {
                 object obj = ResourceManager.GetObject("clear_map", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap edit_tile_types {
+            get {
+                object obj = ResourceManager.GetObject("edit_tile_types", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -240,13 +256,69 @@ namespace Tiny_Tile_Editor.Properties {
         ///
         ///Email: peinhardtd@gmail.com
         ///
-        ///Copyright 2011 Dylan Peinhardt
+        ///Site: http://code.google.com/p/tiny-tile-editor/
         ///
-        ///Version 1.0.
+        ///Version 2.0
+        ///
+        ///Copyright 2011 Dylan Peinhardt.
         /// </summary>
         internal static string Text_About {
             get {
                 return ResourceManager.GetString("Text_About", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Cannot edit the default tile type..
+        /// </summary>
+        internal static string Text_Cannot_Edit_Default_Tile_Type {
+            get {
+                return ResourceManager.GetString("Text_Cannot_Edit_Default_Tile_Type", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Cannot remove the default tile type..
+        /// </summary>
+        internal static string Text_Cannot_Remove_Default_Tile_Type {
+            get {
+                return ResourceManager.GetString("Text_Cannot_Remove_Default_Tile_Type", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Are you sure you want to delete this tile type?.
+        /// </summary>
+        internal static string Text_Confirm_Delete_Tile_Type {
+            get {
+                return ResourceManager.GetString("Text_Confirm_Delete_Tile_Type", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This identifier is already in use. Please choose another..
+        /// </summary>
+        internal static string Text_Identifier_In_Use {
+            get {
+                return ResourceManager.GetString("Text_Identifier_In_Use", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Please enter a negative numerical tile identifier..
+        /// </summary>
+        internal static string Text_Invalid_Tile_Type_Identifier {
+            get {
+                return ResourceManager.GetString("Text_Invalid_Tile_Type_Identifier", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Please enter a valid name for the tile type..
+        /// </summary>
+        internal static string Text_Invalid_Tile_Type_Name {
+            get {
+                return ResourceManager.GetString("Text_Invalid_Tile_Type_Name", resourceCulture);
             }
         }
         
@@ -260,13 +332,22 @@ namespace Tiny_Tile_Editor.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Are you sure you want to delete this tile type? This operation will remove all tiles of that type from the map. This process cannot be un-done..
+        /// </summary>
+        internal static string Text_Remove_Tile_Type {
+            get {
+                return ResourceManager.GetString("Text_Remove_Tile_Type", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Use the mouse wheel to vertically scroll the displays. Shift + mouse wheel scrolls horizontally.
         ///
-        ///Use the QWER to quickly switch between tools.
+        ///Use the QWE to quickly switch between tools.
         ///
         ///A and S shift the current layer down and up, respectively.
         ///
-        ///Undo and redo work when changing the map&apos;s dimensions.
+        ///Undo and redo work when changing the map&apos;s dimensions and after editing tile types.
         ///
         ///Click the alternate mouse button to cancel the current drawing operation.
         ///

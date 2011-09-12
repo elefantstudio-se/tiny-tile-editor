@@ -29,10 +29,7 @@ namespace Tiny_Tile_Editor
 
         public Selection()
         {
-            tileSize = 32;
-
-            rectangle = new Rectangle(0, 0, tileSize, tileSize);
-            origin = new Vector2(rectangle.X, rectangle.Y);
+            Reset();
         }
 
         public Selection(int clientX, int clientY, int tileSize)
@@ -49,6 +46,14 @@ namespace Tiny_Tile_Editor
             {
                 return rectangle;
             }
+        }
+
+        public void Reset()
+        {
+            tileSize = 32;
+
+            rectangle = new Rectangle(0, 0, tileSize, tileSize);
+            origin = new Vector2(rectangle.X, rectangle.Y);
         }
 
         public void ChangeTileSize(int newTileSize)

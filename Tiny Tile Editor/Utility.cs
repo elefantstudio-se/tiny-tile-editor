@@ -15,40 +15,53 @@
 
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Tiny_Tile_Editor.Tiles;
 
 namespace Tiny_Tile_Editor
 {
-    class Utility
+    static class Utility
     {
         private static Texture2D whitePixel;
 
         public static void DrawRectangle(SpriteBatch spriteBatch, int borderWidth, Rectangle r, Color tint)
         {
-            if (whitePixel == null)
-            {
-                CreateWhitePixel(spriteBatch.GraphicsDevice);
-            }
+            Texture2D workingPixel = whitePixel ?? CreateWhitePixel(spriteBatch.GraphicsDevice);
 
-            spriteBatch.Draw(whitePixel, new Rectangle(r.Left, r.Top, borderWidth, r.Height), tint); // Left
-            spriteBatch.Draw(whitePixel, new Rectangle(r.Right, r.Top, borderWidth, r.Height), tint); // Right
-            spriteBatch.Draw(whitePixel, new Rectangle(r.Left, r.Top, r.Width, borderWidth), tint); // Top
-            spriteBatch.Draw(whitePixel, new Rectangle(r.Left, r.Bottom, r.Width, borderWidth), tint); // Bottom
+            spriteBatch.Draw(workingPixel, new Rectangle(r.Left, r.Top, borderWidth, r.Height), tint); // Left
+            spriteBatch.Draw(workingPixel, new Rectangle(r.Right, r.Top, borderWidth, r.Height), tint); // Right
+            spriteBatch.Draw(workingPixel, new Rectangle(r.Left, r.Top, r.Width, borderWidth), tint); // Top
+            spriteBatch.Draw(workingPixel, new Rectangle(r.Left, r.Bottom, r.Width, borderWidth), tint); // Bottom
         }
 
         public static void DrawRectangle(SpriteBatch spriteBatch, Rectangle r, Color tint)
         {
-            if (whitePixel == null)
-            {
-                CreateWhitePixel(spriteBatch.GraphicsDevice);
-            }
+            Texture2D workingPixel = whitePixel ?? CreateWhitePixel(spriteBatch.GraphicsDevice);
 
-            spriteBatch.Draw(whitePixel, r, tint);
+            spriteBatch.Draw(workingPixel, r, tint);
         }
 
-        private static void CreateWhitePixel(GraphicsDevice graphicsDevice)
+        public static void DrawCustomTile(SpriteBatch spriteBatch, Rectangle r, TileType tileType)
+        {
+            Texture2D workingPixel = whitePixel ?? CreateWhitePixel(spriteBatch.GraphicsDevice);
+
+            const float alphaAmount = 0.5f;
+
+            int colorR = (int)(tileType.Color.R * alphaAmount);
+            int colorG = (int)(tileType.Color.G * alphaAmount);
+            int colorB = (int)(tileType.Color.B * alphaAmount);
+            int colorA = (int)(tileType.Color.A * alphaAmount);
+
+            Color transparentColor = new Color(colorR, colorG, colorB, colorA);
+
+            spriteBatch.Draw(workingPixel, r, transparentColor);
+        }
+
+        private static Texture2D CreateWhitePixel(GraphicsDevice graphicsDevice)
         {
             whitePixel = new Texture2D(graphicsDevice, 1, 1);
             whitePixel.SetData(new[] { Color.White });
+
+            return whitePixel;
         }
     }
 }

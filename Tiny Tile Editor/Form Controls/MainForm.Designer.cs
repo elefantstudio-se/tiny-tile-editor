@@ -49,21 +49,23 @@ namespace Tiny_Tile_Editor.Form_Controls
             this.openMapToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.saveMapToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.saveMapAsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripSeparator();
+            this.toolStripMenuSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.loadTilesetToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripMenuItem2 = new System.Windows.Forms.ToolStripSeparator();
+            this.toolStripMenuSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.editToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.undoToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.redoToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripMenuItem3 = new System.Windows.Forms.ToolStripSeparator();
+            this.toolStripMenuSeparator3 = new System.Windows.Forms.ToolStripSeparator();
+            this.editTileTypesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuSeparator4 = new System.Windows.Forms.ToolStripSeparator();
             this.clearActiveLayerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.clearCollisionLayerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.clearCustomLayerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.clearMapToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.viewToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.showMapGridToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.showTilesetGridToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripMenuItem4 = new System.Windows.Forms.ToolStripSeparator();
+            this.toolStripMenuSeparator5 = new System.Windows.Forms.ToolStripSeparator();
             this.showOtherLayersToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.showCollisionLayerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -73,29 +75,29 @@ namespace Tiny_Tile_Editor.Form_Controls
             this.splitContainer = new System.Windows.Forms.SplitContainer();
             this.hscMap = new System.Windows.Forms.HScrollBar();
             this.vscMap = new System.Windows.Forms.VScrollBar();
+            this.dispMap = new Tiny_Tile_Editor.Form_Controls.TileDisplay();
             this.hscTileset = new System.Windows.Forms.HScrollBar();
             this.vscTileset = new System.Windows.Forms.VScrollBar();
-            this.toolStrip = new System.Windows.Forms.ToolStrip();
-            this.tspBrush = new System.Windows.Forms.ToolStripButton();
-            this.tspFill = new System.Windows.Forms.ToolStripButton();
-            this.tspMarquee = new System.Windows.Forms.ToolStripButton();
-            this.tspCollision = new System.Windows.Forms.ToolStripButton();
-            this.toolStripSeparator = new System.Windows.Forms.ToolStripSeparator();
-            this.tspLayerDown = new System.Windows.Forms.ToolStripButton();
-            this.tspLayer = new System.Windows.Forms.ToolStripLabel();
-            this.tspLayerUp = new System.Windows.Forms.ToolStripButton();
+            this.dispTileset = new Tiny_Tile_Editor.Form_Controls.TileDisplay();
             this.lblTileSize = new System.Windows.Forms.Label();
             this.lblHeight = new System.Windows.Forms.Label();
             this.lblWidth = new System.Windows.Forms.Label();
             this.lblLayers = new System.Windows.Forms.Label();
             this.saveFileDialog = new System.Windows.Forms.SaveFileDialog();
             this.openFileDialog = new System.Windows.Forms.OpenFileDialog();
+            this.tspBrush = new System.Windows.Forms.ToolStripButton();
+            this.tspFill = new System.Windows.Forms.ToolStripButton();
+            this.tspMarquee = new System.Windows.Forms.ToolStripButton();
+            this.toolStripSeparator = new System.Windows.Forms.ToolStripSeparator();
+            this.tspLayerDown = new System.Windows.Forms.ToolStripButton();
+            this.tspLayer = new System.Windows.Forms.ToolStripLabel();
+            this.tspLayerUp = new System.Windows.Forms.ToolStripButton();
+            this.toolStrip = new System.Windows.Forms.ToolStrip();
+            this.tspTileTypes = new System.Windows.Forms.ToolStripComboBox();
             this.numTileSize = new Tiny_Tile_Editor.Form_Controls.NonScrollingNumericUpDown();
             this.numHeight = new Tiny_Tile_Editor.Form_Controls.NonScrollingNumericUpDown();
             this.numWidth = new Tiny_Tile_Editor.Form_Controls.NonScrollingNumericUpDown();
             this.numLayers = new Tiny_Tile_Editor.Form_Controls.NonScrollingNumericUpDown();
-            this.dispMap = new Tiny_Tile_Editor.Form_Controls.TileDisplay();
-            this.dispTileset = new Tiny_Tile_Editor.Form_Controls.TileDisplay();
             this.menuStrip.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer)).BeginInit();
             this.splitContainer.Panel1.SuspendLayout();
@@ -129,9 +131,9 @@ namespace Tiny_Tile_Editor.Form_Controls
             this.openMapToolStripMenuItem,
             this.saveMapToolStripMenuItem,
             this.saveMapAsToolStripMenuItem,
-            this.toolStripMenuItem1,
+            this.toolStripMenuSeparator1,
             this.loadTilesetToolStripMenuItem,
-            this.toolStripMenuItem2,
+            this.toolStripMenuSeparator2,
             this.exitToolStripMenuItem});
             this.fileToolStripMenuItem.Name = "fileToolStripMenuItem";
             this.fileToolStripMenuItem.Size = new System.Drawing.Size(37, 20);
@@ -178,10 +180,10 @@ namespace Tiny_Tile_Editor.Form_Controls
             this.saveMapAsToolStripMenuItem.Text = "S&ave Map As";
             this.saveMapAsToolStripMenuItem.Click += new System.EventHandler(this.saveMapAsToolStripMenuItem_Click);
             // 
-            // toolStripMenuItem1
+            // toolStripMenuSeparator1
             // 
-            this.toolStripMenuItem1.Name = "toolStripMenuItem1";
-            this.toolStripMenuItem1.Size = new System.Drawing.Size(210, 6);
+            this.toolStripMenuSeparator1.Name = "toolStripMenuSeparator1";
+            this.toolStripMenuSeparator1.Size = new System.Drawing.Size(210, 6);
             // 
             // loadTilesetToolStripMenuItem
             // 
@@ -192,10 +194,10 @@ namespace Tiny_Tile_Editor.Form_Controls
             this.loadTilesetToolStripMenuItem.Text = "&Load Tileset";
             this.loadTilesetToolStripMenuItem.Click += new System.EventHandler(this.loadTilesetToolStripMenuItem_Click);
             // 
-            // toolStripMenuItem2
+            // toolStripMenuSeparator2
             // 
-            this.toolStripMenuItem2.Name = "toolStripMenuItem2";
-            this.toolStripMenuItem2.Size = new System.Drawing.Size(210, 6);
+            this.toolStripMenuSeparator2.Name = "toolStripMenuSeparator2";
+            this.toolStripMenuSeparator2.Size = new System.Drawing.Size(210, 6);
             // 
             // exitToolStripMenuItem
             // 
@@ -211,9 +213,11 @@ namespace Tiny_Tile_Editor.Form_Controls
             this.editToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.undoToolStripMenuItem,
             this.redoToolStripMenuItem,
-            this.toolStripMenuItem3,
+            this.toolStripMenuSeparator3,
+            this.editTileTypesToolStripMenuItem,
+            this.toolStripMenuSeparator4,
             this.clearActiveLayerToolStripMenuItem,
-            this.clearCollisionLayerToolStripMenuItem,
+            this.clearCustomLayerToolStripMenuItem,
             this.clearMapToolStripMenuItem});
             this.editToolStripMenuItem.Name = "editToolStripMenuItem";
             this.editToolStripMenuItem.Size = new System.Drawing.Size(39, 20);
@@ -225,7 +229,7 @@ namespace Tiny_Tile_Editor.Form_Controls
             this.undoToolStripMenuItem.Image = global::Tiny_Tile_Editor.Properties.Resources.undo;
             this.undoToolStripMenuItem.Name = "undoToolStripMenuItem";
             this.undoToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Z)));
-            this.undoToolStripMenuItem.Size = new System.Drawing.Size(181, 22);
+            this.undoToolStripMenuItem.Size = new System.Drawing.Size(177, 22);
             this.undoToolStripMenuItem.Text = "&Undo";
             this.undoToolStripMenuItem.Click += new System.EventHandler(this.undoToolStripMenuItem_Click);
             // 
@@ -235,39 +239,53 @@ namespace Tiny_Tile_Editor.Form_Controls
             this.redoToolStripMenuItem.Image = global::Tiny_Tile_Editor.Properties.Resources.redo;
             this.redoToolStripMenuItem.Name = "redoToolStripMenuItem";
             this.redoToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Y)));
-            this.redoToolStripMenuItem.Size = new System.Drawing.Size(181, 22);
+            this.redoToolStripMenuItem.Size = new System.Drawing.Size(177, 22);
             this.redoToolStripMenuItem.Text = "&Redo";
             this.redoToolStripMenuItem.Click += new System.EventHandler(this.redoToolStripMenuItem_Click);
             // 
-            // toolStripMenuItem3
+            // toolStripMenuSeparator3
             // 
-            this.toolStripMenuItem3.Name = "toolStripMenuItem3";
-            this.toolStripMenuItem3.Size = new System.Drawing.Size(178, 6);
+            this.toolStripMenuSeparator3.Name = "toolStripMenuSeparator3";
+            this.toolStripMenuSeparator3.Size = new System.Drawing.Size(174, 6);
+            // 
+            // editTileTypesToolStripMenuItem
+            // 
+            this.editTileTypesToolStripMenuItem.Enabled = false;
+            this.editTileTypesToolStripMenuItem.Image = global::Tiny_Tile_Editor.Properties.Resources.edit_tile_types;
+            this.editTileTypesToolStripMenuItem.Name = "editTileTypesToolStripMenuItem";
+            this.editTileTypesToolStripMenuItem.Size = new System.Drawing.Size(177, 22);
+            this.editTileTypesToolStripMenuItem.Text = "Edit Tile Types";
+            this.editTileTypesToolStripMenuItem.Click += new System.EventHandler(this.editTileTypesToolStripMenuItem_Click);
+            // 
+            // toolStripMenuSeparator4
+            // 
+            this.toolStripMenuSeparator4.Name = "toolStripMenuSeparator4";
+            this.toolStripMenuSeparator4.Size = new System.Drawing.Size(174, 6);
             // 
             // clearActiveLayerToolStripMenuItem
             // 
             this.clearActiveLayerToolStripMenuItem.Enabled = false;
             this.clearActiveLayerToolStripMenuItem.Image = global::Tiny_Tile_Editor.Properties.Resources.clear_active_layer;
             this.clearActiveLayerToolStripMenuItem.Name = "clearActiveLayerToolStripMenuItem";
-            this.clearActiveLayerToolStripMenuItem.Size = new System.Drawing.Size(181, 22);
+            this.clearActiveLayerToolStripMenuItem.Size = new System.Drawing.Size(177, 22);
             this.clearActiveLayerToolStripMenuItem.Text = "Clear Active Layer";
             this.clearActiveLayerToolStripMenuItem.Click += new System.EventHandler(this.clearLayerToolStripMenuItem_Click);
             // 
-            // clearCollisionLayerToolStripMenuItem
+            // clearCustomLayerToolStripMenuItem
             // 
-            this.clearCollisionLayerToolStripMenuItem.Enabled = false;
-            this.clearCollisionLayerToolStripMenuItem.Image = global::Tiny_Tile_Editor.Properties.Resources.clear_collision_layer;
-            this.clearCollisionLayerToolStripMenuItem.Name = "clearCollisionLayerToolStripMenuItem";
-            this.clearCollisionLayerToolStripMenuItem.Size = new System.Drawing.Size(181, 22);
-            this.clearCollisionLayerToolStripMenuItem.Text = "Clear Collision Layer";
-            this.clearCollisionLayerToolStripMenuItem.Click += new System.EventHandler(this.clearCollisionToolStripMenuItem_Click);
+            this.clearCustomLayerToolStripMenuItem.Enabled = false;
+            this.clearCustomLayerToolStripMenuItem.Image = global::Tiny_Tile_Editor.Properties.Resources.clear_collision_layer;
+            this.clearCustomLayerToolStripMenuItem.Name = "clearCustomLayerToolStripMenuItem";
+            this.clearCustomLayerToolStripMenuItem.Size = new System.Drawing.Size(177, 22);
+            this.clearCustomLayerToolStripMenuItem.Text = "Clear Custom Layer";
+            this.clearCustomLayerToolStripMenuItem.Click += new System.EventHandler(this.clearCollisionToolStripMenuItem_Click);
             // 
             // clearMapToolStripMenuItem
             // 
             this.clearMapToolStripMenuItem.Enabled = false;
             this.clearMapToolStripMenuItem.Image = global::Tiny_Tile_Editor.Properties.Resources.clear_map;
             this.clearMapToolStripMenuItem.Name = "clearMapToolStripMenuItem";
-            this.clearMapToolStripMenuItem.Size = new System.Drawing.Size(181, 22);
+            this.clearMapToolStripMenuItem.Size = new System.Drawing.Size(177, 22);
             this.clearMapToolStripMenuItem.Text = "Clear Map";
             this.clearMapToolStripMenuItem.Click += new System.EventHandler(this.clearMapToolStripMenuItem_Click);
             // 
@@ -276,7 +294,7 @@ namespace Tiny_Tile_Editor.Form_Controls
             this.viewToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.showMapGridToolStripMenuItem,
             this.showTilesetGridToolStripMenuItem,
-            this.toolStripMenuItem4,
+            this.toolStripMenuSeparator5,
             this.showOtherLayersToolStripMenuItem,
             this.showCollisionLayerToolStripMenuItem});
             this.viewToolStripMenuItem.Name = "viewToolStripMenuItem";
@@ -305,10 +323,10 @@ namespace Tiny_Tile_Editor.Form_Controls
             this.showTilesetGridToolStripMenuItem.Size = new System.Drawing.Size(202, 22);
             this.showTilesetGridToolStripMenuItem.Text = "Show &Tileset Grid";
             // 
-            // toolStripMenuItem4
+            // toolStripMenuSeparator5
             // 
-            this.toolStripMenuItem4.Name = "toolStripMenuItem4";
-            this.toolStripMenuItem4.Size = new System.Drawing.Size(199, 6);
+            this.toolStripMenuSeparator5.Name = "toolStripMenuSeparator5";
+            this.toolStripMenuSeparator5.Size = new System.Drawing.Size(199, 6);
             // 
             // showOtherLayersToolStripMenuItem
             // 
@@ -407,6 +425,26 @@ namespace Tiny_Tile_Editor.Form_Controls
             this.vscMap.TabIndex = 0;
             this.vscMap.Scroll += new System.Windows.Forms.ScrollEventHandler(this.Map_Scroll);
             // 
+            // dispMap
+            // 
+            this.dispMap.AllowDrop = true;
+            this.dispMap.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+                        | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.dispMap.Location = new System.Drawing.Point(3, 3);
+            this.dispMap.Name = "dispMap";
+            this.dispMap.Size = new System.Drawing.Size(448, 600);
+            this.dispMap.TabIndex = 0;
+            this.dispMap.TabStop = false;
+            this.dispMap.Text = "Map Display";
+            this.dispMap.DragDrop += new System.Windows.Forms.DragEventHandler(this.dispMap_DragDrop);
+            this.dispMap.DragEnter += new System.Windows.Forms.DragEventHandler(this.dispMap_DragEnter);
+            this.dispMap.DragLeave += new System.EventHandler(this.display_DragLeave);
+            this.dispMap.MouseDown += new System.Windows.Forms.MouseEventHandler(this.dispMap_MouseDown);
+            this.dispMap.MouseMove += new System.Windows.Forms.MouseEventHandler(this.dispMap_MouseMove);
+            this.dispMap.MouseUp += new System.Windows.Forms.MouseEventHandler(this.dispMap_MouseUp);
+            this.dispMap.Resize += new System.EventHandler(this.dispMap_Resize);
+            // 
             // hscTileset
             // 
             this.hscTileset.Dock = System.Windows.Forms.DockStyle.Bottom;
@@ -427,99 +465,25 @@ namespace Tiny_Tile_Editor.Form_Controls
             this.vscTileset.TabIndex = 0;
             this.vscTileset.Scroll += new System.Windows.Forms.ScrollEventHandler(this.Tileset_Scroll);
             // 
-            // toolStrip
+            // dispTileset
             // 
-            this.toolStrip.BackColor = System.Drawing.Color.Transparent;
-            this.toolStrip.Enabled = false;
-            this.toolStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.tspBrush,
-            this.tspFill,
-            this.tspMarquee,
-            this.tspCollision,
-            this.toolStripSeparator,
-            this.tspLayerDown,
-            this.tspLayer,
-            this.tspLayerUp});
-            this.toolStrip.Location = new System.Drawing.Point(0, 24);
-            this.toolStrip.Name = "toolStrip";
-            this.toolStrip.Size = new System.Drawing.Size(974, 25);
-            this.toolStrip.TabIndex = 0;
-            this.toolStrip.Text = "Tool Strip";
-            // 
-            // tspBrush
-            // 
-            this.tspBrush.Checked = true;
-            this.tspBrush.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.tspBrush.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.tspBrush.Image = global::Tiny_Tile_Editor.Properties.Resources.tool_brush;
-            this.tspBrush.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.tspBrush.Name = "tspBrush";
-            this.tspBrush.Size = new System.Drawing.Size(23, 22);
-            this.tspBrush.Text = "Brush (Q)";
-            this.tspBrush.Click += new System.EventHandler(this.tspTool_Click);
-            // 
-            // tspFill
-            // 
-            this.tspFill.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.tspFill.Image = global::Tiny_Tile_Editor.Properties.Resources.tool_fill;
-            this.tspFill.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.tspFill.Name = "tspFill";
-            this.tspFill.Size = new System.Drawing.Size(23, 22);
-            this.tspFill.Text = "Fill (W)";
-            this.tspFill.Click += new System.EventHandler(this.tspTool_Click);
-            // 
-            // tspMarquee
-            // 
-            this.tspMarquee.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.tspMarquee.Image = global::Tiny_Tile_Editor.Properties.Resources.tool_marquee;
-            this.tspMarquee.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.tspMarquee.Name = "tspMarquee";
-            this.tspMarquee.Size = new System.Drawing.Size(23, 22);
-            this.tspMarquee.Text = "Marquee (E)";
-            this.tspMarquee.Click += new System.EventHandler(this.tspTool_Click);
-            // 
-            // tspCollision
-            // 
-            this.tspCollision.CheckOnClick = true;
-            this.tspCollision.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.tspCollision.Image = global::Tiny_Tile_Editor.Properties.Resources.tool_collision;
-            this.tspCollision.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.tspCollision.Name = "tspCollision";
-            this.tspCollision.Size = new System.Drawing.Size(23, 22);
-            this.tspCollision.Text = "Collision Tile (R)";
-            // 
-            // toolStripSeparator
-            // 
-            this.toolStripSeparator.Name = "toolStripSeparator";
-            this.toolStripSeparator.Size = new System.Drawing.Size(6, 25);
-            // 
-            // tspLayerDown
-            // 
-            this.tspLayerDown.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.tspLayerDown.Image = global::Tiny_Tile_Editor.Properties.Resources.layer_down;
-            this.tspLayerDown.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.tspLayerDown.Name = "tspLayerDown";
-            this.tspLayerDown.Size = new System.Drawing.Size(23, 22);
-            this.tspLayerDown.Text = "Layer Down (A)";
-            this.tspLayerDown.Click += new System.EventHandler(this.tspLayerDown_Click);
-            // 
-            // tspLayer
-            // 
-            this.tspLayer.BackColor = System.Drawing.Color.Transparent;
-            this.tspLayer.Name = "tspLayer";
-            this.tspLayer.Size = new System.Drawing.Size(30, 22);
-            this.tspLayer.Text = "1 / 3";
-            this.tspLayer.ToolTipText = "Current Layer";
-            // 
-            // tspLayerUp
-            // 
-            this.tspLayerUp.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.tspLayerUp.Image = global::Tiny_Tile_Editor.Properties.Resources.layer_up;
-            this.tspLayerUp.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.tspLayerUp.Name = "tspLayerUp";
-            this.tspLayerUp.Size = new System.Drawing.Size(23, 22);
-            this.tspLayerUp.Text = "Layer Up (S)";
-            this.tspLayerUp.Click += new System.EventHandler(this.tspLayerUp_Click);
+            this.dispTileset.AllowDrop = true;
+            this.dispTileset.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
+                        | System.Windows.Forms.AnchorStyles.Left)
+                        | System.Windows.Forms.AnchorStyles.Right)));
+            this.dispTileset.Location = new System.Drawing.Point(3, 3);
+            this.dispTileset.Name = "dispTileset";
+            this.dispTileset.Size = new System.Drawing.Size(452, 600);
+            this.dispTileset.TabIndex = 0;
+            this.dispTileset.TabStop = false;
+            this.dispTileset.Text = "Tileset Display";
+            this.dispTileset.OnInitialize += new System.EventHandler(this.dispTileset_OnInitialize);
+            this.dispTileset.DragDrop += new System.Windows.Forms.DragEventHandler(this.dispTileset_DragDrop);
+            this.dispTileset.DragEnter += new System.Windows.Forms.DragEventHandler(this.dispTileset_DragEnter);
+            this.dispTileset.DragLeave += new System.EventHandler(this.display_DragLeave);
+            this.dispTileset.MouseDown += new System.Windows.Forms.MouseEventHandler(this.dispTileset_MouseDown);
+            this.dispTileset.MouseMove += new System.Windows.Forms.MouseEventHandler(this.dispTileset_MouseMove);
+            this.dispTileset.Resize += new System.EventHandler(this.dispTileset_Resize);
             // 
             // lblTileSize
             // 
@@ -583,6 +547,97 @@ namespace Tiny_Tile_Editor.Form_Controls
             // 
             this.openFileDialog.DefaultExt = "xml";
             this.openFileDialog.Filter = "Map Files (*.xml)|*.xml";
+            // 
+            // tspBrush
+            // 
+            this.tspBrush.Checked = true;
+            this.tspBrush.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.tspBrush.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.tspBrush.Image = global::Tiny_Tile_Editor.Properties.Resources.tool_brush;
+            this.tspBrush.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.tspBrush.Name = "tspBrush";
+            this.tspBrush.Size = new System.Drawing.Size(23, 22);
+            this.tspBrush.Text = "Brush (Q)";
+            this.tspBrush.Click += new System.EventHandler(this.tspTool_Click);
+            // 
+            // tspFill
+            // 
+            this.tspFill.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.tspFill.Image = global::Tiny_Tile_Editor.Properties.Resources.tool_fill;
+            this.tspFill.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.tspFill.Name = "tspFill";
+            this.tspFill.Size = new System.Drawing.Size(23, 22);
+            this.tspFill.Text = "Fill (W)";
+            this.tspFill.Click += new System.EventHandler(this.tspTool_Click);
+            // 
+            // tspMarquee
+            // 
+            this.tspMarquee.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.tspMarquee.Image = global::Tiny_Tile_Editor.Properties.Resources.tool_marquee;
+            this.tspMarquee.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.tspMarquee.Name = "tspMarquee";
+            this.tspMarquee.Size = new System.Drawing.Size(23, 22);
+            this.tspMarquee.Text = "Marquee (E)";
+            this.tspMarquee.Click += new System.EventHandler(this.tspTool_Click);
+            // 
+            // toolStripSeparator
+            // 
+            this.toolStripSeparator.Name = "toolStripSeparator";
+            this.toolStripSeparator.Size = new System.Drawing.Size(6, 25);
+            // 
+            // tspLayerDown
+            // 
+            this.tspLayerDown.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.tspLayerDown.Image = global::Tiny_Tile_Editor.Properties.Resources.layer_down;
+            this.tspLayerDown.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.tspLayerDown.Name = "tspLayerDown";
+            this.tspLayerDown.Size = new System.Drawing.Size(23, 22);
+            this.tspLayerDown.Text = "Layer Down (A)";
+            this.tspLayerDown.Click += new System.EventHandler(this.tspLayerDown_Click);
+            // 
+            // tspLayer
+            // 
+            this.tspLayer.BackColor = System.Drawing.Color.Transparent;
+            this.tspLayer.Name = "tspLayer";
+            this.tspLayer.Size = new System.Drawing.Size(30, 22);
+            this.tspLayer.Text = "1 / 3";
+            this.tspLayer.ToolTipText = "Current Layer";
+            // 
+            // tspLayerUp
+            // 
+            this.tspLayerUp.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.tspLayerUp.Image = global::Tiny_Tile_Editor.Properties.Resources.layer_up;
+            this.tspLayerUp.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.tspLayerUp.Name = "tspLayerUp";
+            this.tspLayerUp.Size = new System.Drawing.Size(23, 22);
+            this.tspLayerUp.Text = "Layer Up (S)";
+            this.tspLayerUp.Click += new System.EventHandler(this.tspLayerUp_Click);
+            // 
+            // toolStrip
+            // 
+            this.toolStrip.BackColor = System.Drawing.Color.Transparent;
+            this.toolStrip.Enabled = false;
+            this.toolStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.tspBrush,
+            this.tspFill,
+            this.tspMarquee,
+            this.toolStripSeparator,
+            this.tspLayerDown,
+            this.tspLayer,
+            this.tspLayerUp,
+            this.tspTileTypes});
+            this.toolStrip.Location = new System.Drawing.Point(0, 24);
+            this.toolStrip.Name = "toolStrip";
+            this.toolStrip.Size = new System.Drawing.Size(974, 25);
+            this.toolStrip.TabIndex = 0;
+            this.toolStrip.Text = "Tool Strip";
+            // 
+            // tspTileTypes
+            // 
+            this.tspTileTypes.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.tspTileTypes.FlatStyle = System.Windows.Forms.FlatStyle.Standard;
+            this.tspTileTypes.Name = "tspTileTypes";
+            this.tspTileTypes.Size = new System.Drawing.Size(121, 25);
             // 
             // numTileSize
             // 
@@ -687,46 +742,6 @@ namespace Tiny_Tile_Editor.Form_Controls
             this.numLayers.ValueChanged += new System.EventHandler(this.numLayers_ValueChanged);
             this.numLayers.KeyDown += new System.Windows.Forms.KeyEventHandler(this.numUpDown_KeyDown);
             // 
-            // dispMap
-            // 
-            this.dispMap.AllowDrop = true;
-            this.dispMap.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-                        | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
-            this.dispMap.Location = new System.Drawing.Point(3, 3);
-            this.dispMap.Name = "dispMap";
-            this.dispMap.Size = new System.Drawing.Size(448, 600);
-            this.dispMap.TabIndex = 0;
-            this.dispMap.TabStop = false;
-            this.dispMap.Text = "Map Display";
-            this.dispMap.DragDrop += new System.Windows.Forms.DragEventHandler(this.dispMap_DragDrop);
-            this.dispMap.DragEnter += new System.Windows.Forms.DragEventHandler(this.dispMap_DragEnter);
-            this.dispMap.DragLeave += new System.EventHandler(this.display_DragLeave);
-            this.dispMap.MouseDown += new System.Windows.Forms.MouseEventHandler(this.dispMap_MouseDown);
-            this.dispMap.MouseMove += new System.Windows.Forms.MouseEventHandler(this.dispMap_MouseMove);
-            this.dispMap.MouseUp += new System.Windows.Forms.MouseEventHandler(this.dispMap_MouseUp);
-            this.dispMap.Resize += new System.EventHandler(this.dispMap_Resize);
-            // 
-            // dispTileset
-            // 
-            this.dispTileset.AllowDrop = true;
-            this.dispTileset.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-                        | System.Windows.Forms.AnchorStyles.Left)
-                        | System.Windows.Forms.AnchorStyles.Right)));
-            this.dispTileset.Location = new System.Drawing.Point(3, 3);
-            this.dispTileset.Name = "dispTileset";
-            this.dispTileset.Size = new System.Drawing.Size(452, 600);
-            this.dispTileset.TabIndex = 0;
-            this.dispTileset.TabStop = false;
-            this.dispTileset.Text = "Tileset Display";
-            this.dispTileset.OnInitialize += new System.EventHandler(this.dispTileset_OnInitialize);
-            this.dispTileset.DragDrop += new System.Windows.Forms.DragEventHandler(this.dispTileset_DragDrop);
-            this.dispTileset.DragEnter += new System.Windows.Forms.DragEventHandler(this.dispTileset_DragEnter);
-            this.dispTileset.DragLeave += new System.EventHandler(this.display_DragLeave);
-            this.dispTileset.MouseDown += new System.Windows.Forms.MouseEventHandler(this.dispTileset_MouseDown);
-            this.dispTileset.MouseMove += new System.Windows.Forms.MouseEventHandler(this.dispTileset_MouseMove);
-            this.dispTileset.Resize += new System.EventHandler(this.dispTileset_Resize);
-            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -773,9 +788,9 @@ namespace Tiny_Tile_Editor.Form_Controls
         private System.Windows.Forms.ToolStripMenuItem newMapToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem openMapToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem saveMapToolStripMenuItem;
-        private System.Windows.Forms.ToolStripSeparator toolStripMenuItem1;
+        private System.Windows.Forms.ToolStripSeparator toolStripMenuSeparator1;
         private System.Windows.Forms.ToolStripMenuItem loadTilesetToolStripMenuItem;
-        private System.Windows.Forms.ToolStripSeparator toolStripMenuItem2;
+        private System.Windows.Forms.ToolStripSeparator toolStripMenuSeparator2;
         private System.Windows.Forms.ToolStripMenuItem exitToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem editToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem undoToolStripMenuItem;
@@ -790,26 +805,16 @@ namespace Tiny_Tile_Editor.Form_Controls
         private System.Windows.Forms.VScrollBar vscMap;
         private System.Windows.Forms.HScrollBar hscTileset;
         private System.Windows.Forms.VScrollBar vscTileset;
-        private System.Windows.Forms.ToolStripSeparator toolStripMenuItem3;
+        private System.Windows.Forms.ToolStripSeparator toolStripMenuSeparator3;
         private System.Windows.Forms.ToolStripMenuItem clearMapToolStripMenuItem;
-        private System.Windows.Forms.ToolStrip toolStrip;
-        private System.Windows.Forms.ToolStripButton tspFill;
-        private System.Windows.Forms.ToolStripButton tspBrush;
-        private System.Windows.Forms.ToolStripSeparator toolStripSeparator;
         private System.Windows.Forms.Label lblTileSize;
         private System.Windows.Forms.Label lblHeight;
         private System.Windows.Forms.Label lblWidth;
         private System.Windows.Forms.Label lblLayers;
-        private System.Windows.Forms.ToolStripButton tspLayerDown;
-        private System.Windows.Forms.ToolStripLabel tspLayer;
-        private System.Windows.Forms.ToolStripButton tspLayerUp;
         private System.Windows.Forms.ToolStripMenuItem clearActiveLayerToolStripMenuItem;
-        private System.Windows.Forms.ToolStripButton tspMarquee;
-        private System.Windows.Forms.ToolStripSeparator toolStripMenuItem4;
         private System.Windows.Forms.ToolStripMenuItem showOtherLayersToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem showCollisionLayerToolStripMenuItem;
-        private System.Windows.Forms.ToolStripButton tspCollision;
-        private System.Windows.Forms.ToolStripMenuItem clearCollisionLayerToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem clearCustomLayerToolStripMenuItem;
         private System.Windows.Forms.SaveFileDialog saveFileDialog;
         private System.Windows.Forms.ToolStripMenuItem saveMapAsToolStripMenuItem;
         private System.Windows.Forms.OpenFileDialog openFileDialog;
@@ -820,6 +825,18 @@ namespace Tiny_Tile_Editor.Form_Controls
         private NonScrollingNumericUpDown numWidth;
         private NonScrollingNumericUpDown numHeight;
         private NonScrollingNumericUpDown numTileSize;
+        private System.Windows.Forms.ToolStripButton tspBrush;
+        private System.Windows.Forms.ToolStripButton tspFill;
+        private System.Windows.Forms.ToolStripButton tspMarquee;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator;
+        private System.Windows.Forms.ToolStripButton tspLayerDown;
+        private System.Windows.Forms.ToolStripLabel tspLayer;
+        private System.Windows.Forms.ToolStripButton tspLayerUp;
+        private System.Windows.Forms.ToolStrip toolStrip;
+        private System.Windows.Forms.ToolStripSeparator toolStripMenuSeparator5;
+        private System.Windows.Forms.ToolStripComboBox tspTileTypes;
+        private System.Windows.Forms.ToolStripMenuItem editTileTypesToolStripMenuItem;
+        private System.Windows.Forms.ToolStripSeparator toolStripMenuSeparator4;
     }
 }
 
