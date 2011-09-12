@@ -14,20 +14,18 @@
 //    along with Tiny Tile Editor.  If not, see <http://www.gnu.org/licenses/>.
 
 using System.Collections.Generic;
+using System.ComponentModel;
 
 using Microsoft.Xna.Framework.Graphics;
+using Tiny_Tile_Editor.Tiles;
 
 namespace Tiny_Tile_Editor
 {
     public class Map // Mostly a container
     {
-        public int ActiveLayerIndex;
-
-        public TileLayer CollisionLayer;
-
         public List<TileLayer> TileLayers = new List<TileLayer>();
 
-        public Texture2D TilesetTexture;
+        public BindingList<TileType> TileTypes = new BindingList<TileType>();
 
         public Map()
         {
@@ -36,13 +34,38 @@ namespace Tiny_Tile_Editor
 
         public Map(Map mapCopy)
         {
+            TileTypes = new BindingList<TileType>();
+
+            foreach (TileType tileType in mapCopy.TileTypes)
+            {
+                TileTypes.Add(new TileType(tileType));
+            }
+
             TilesetTexture = mapCopy.TilesetTexture;
 
-            CollisionLayer = new TileLayer(mapCopy.CollisionLayer);
+            CustomLayer = new TileLayer(mapCopy.CustomLayer);
             TileLayers = new List<TileLayer>();
 
             foreach (TileLayer layer in mapCopy.TileLayers)
                 TileLayers.Add(new TileLayer(layer));
+        }
+
+        public int ActiveLayerIndex
+        {
+            get;
+            set;
+        }
+
+        public Texture2D TilesetTexture
+        {
+            get;
+            set;
+        }
+
+        public TileLayer CustomLayer
+        {
+            get;
+            set;
         }
 
         public TileLayer ActiveLayer
@@ -57,14 +80,14 @@ namespace Tiny_Tile_Editor
         {
             get
             {
-                return CollisionLayer.Width;
+                return CustomLayer.Width;
             }
             set
             {
                 foreach (TileLayer layer in TileLayers)
                     layer.Width = value;
 
-                CollisionLayer.Width = value;
+                CustomLayer.Width = value;
             }
         }
 
@@ -72,7 +95,7 @@ namespace Tiny_Tile_Editor
         {
             get
             {
-                return CollisionLayer.Width * CollisionLayer.TileSize;
+                return CustomLayer.Width * CustomLayer.TileSize;
             }
         }
 
@@ -80,14 +103,14 @@ namespace Tiny_Tile_Editor
         {
             get
             {
-                return CollisionLayer.Height;
+                return CustomLayer.Height;
             }
             set
             {
                 foreach (TileLayer layer in TileLayers)
                     layer.Height = value;
 
-                CollisionLayer.Height = value;
+                CustomLayer.Height = value;
             }
         }
 
@@ -95,7 +118,7 @@ namespace Tiny_Tile_Editor
         {
             get
             {
-                return CollisionLayer.Height * CollisionLayer.TileSize;
+                return CustomLayer.Height * CustomLayer.TileSize;
             }
         }
 
@@ -103,14 +126,14 @@ namespace Tiny_Tile_Editor
         {
             get
             {
-                return CollisionLayer.TileSize;
+                return CustomLayer.TileSize;
             }
             set
             {
                 foreach (TileLayer layer in TileLayers)
                     layer.TileSize = value;
 
-                CollisionLayer.TileSize = value;
+                CustomLayer.TileSize = value;
             }
         }
 
@@ -119,7 +142,7 @@ namespace Tiny_Tile_Editor
             foreach (TileLayer layer in TileLayers)
                 layer.Clear();
 
-            CollisionLayer.Clear();
+            CustomLayer.Clear();
         }
     }
 }

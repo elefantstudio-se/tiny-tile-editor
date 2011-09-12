@@ -15,6 +15,7 @@
 
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Tiny_Tile_Editor.Tiles;
 
 namespace Tiny_Tile_Editor.Tools
 {
@@ -27,7 +28,7 @@ namespace Tiny_Tile_Editor.Tools
             this.selection = selection;
         }
 
-        public override void Use(TileLayer layer, int tileX, int tileY, Rectangle selectorRect, Tile.Type tileType)
+        public override void Use(TileLayer layer, int tileX, int tileY, Rectangle selectorRect, TileType tileType)
         {
             for (int x = 0; x < selection.Rectangle.Width / layer.TileSize; x += selectorRect.Width / layer.TileSize)
             {
@@ -40,7 +41,7 @@ namespace Tiny_Tile_Editor.Tools
             }
         }
 
-        public override void DrawRegularPreview(SpriteBatch spriteBatch, Texture2D tilesetTexture, Rectangle previewRect, Rectangle selectorRect)
+        public override void DrawRegularTilePreview(SpriteBatch spriteBatch, Texture2D tilesetTexture, Rectangle previewRect, Rectangle selectorRect)
         {
             if (PaintType == PaintingType.Drawing)
             {
@@ -48,11 +49,11 @@ namespace Tiny_Tile_Editor.Tools
             }
         }
 
-        public override void DrawCollisionPreview(SpriteBatch spriteBatch, Rectangle previewRect)
+        public override void DrawCustomTilePreview(SpriteBatch spriteBatch, Rectangle previewRect, TileType tileType)
         {
             if (PaintType == PaintingType.Drawing)
             {
-                Utility.DrawRectangle(spriteBatch, previewRect, Tile.CollisionTileColor);
+                Utility.DrawCustomTile(spriteBatch, previewRect, tileType);
             }
         }
 

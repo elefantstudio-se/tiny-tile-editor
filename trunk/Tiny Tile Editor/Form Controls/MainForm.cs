@@ -25,6 +25,8 @@ using Microsoft.Xna.Framework.Graphics;
 using Tiny_Tile_Editor.Properties;
 using Tiny_Tile_Editor.Tools;
 using Tiny_Tile_Editor.IO;
+using Tiny_Tile_Editor.Tiles;
+using System.ComponentModel;
 
 namespace Tiny_Tile_Editor.Form_Controls
 {
@@ -33,8 +35,6 @@ namespace Tiny_Tile_Editor.Form_Controls
         #region Variables
 
         private Map map = new Map();
-
-        private SpriteBatch spriteBatch;
 
         private Stack<Edit> undoStack = new Stack<Edit>(), redoStack = new Stack<Edit>();
 
@@ -52,9 +52,15 @@ namespace Tiny_Tile_Editor.Form_Controls
 
         private bool ignoreValueChanged;
 
-        private readonly Color displayClearColor = new Color(240, 240, 240);
-
         private bool mouseInMapDisplay;
+
+        private DisplayDrawer displayDrawer;
+
+        private string dragFilename = string.Empty;
+
+        private BindingList<TileType> tileTypes = new BindingList<TileType>();
+
+        private ComboBox tileTypesComboBox;
 
         #endregion
 
@@ -65,6 +71,7 @@ namespace Tiny_Tile_Editor.Form_Controls
             InitializeComponent();
             InitializeBindings();
             InitializeToolStripCollections();
+            InitializeTileTypesComboBox();
 
             dispTileset.OnDraw += dispTileset_OnDraw;
             dispMap.OnDraw += dispMap_OnDraw;
@@ -92,9 +99,26 @@ namespace Tiny_Tile_Editor.Form_Controls
             currentTool = tools[tspBrush];
         }
 
+        private void InitializeTileTypesComboBox()
+        {
+            tileTypesComboBox = (ComboBox)tspTileTypes.Control;
+
+            tileTypes.Add(new TileType(TileType.DefaultName, 0, System.Drawing.Color.Black));
+            tileTypes.Add(new TileType("Collision", -1, System.Drawing.Color.Red));
+
+            tileTypesComboBox.DataSource = tileTypes;
+
+            tileTypesComboBox.DisplayMember = "Name";
+            tileTypesComboBox.ValueMember = "Identifier";
+
+            map.TileTypes = tileTypes;
+
+            tileTypesComboBox.SelectedIndex = 0;
+        }
+
         private void dispTileset_OnInitialize(object sender, EventArgs e)
         {
-            spriteBatch = new SpriteBatch(dispTileset.GraphicsDevice);
+            displayDrawer = new DisplayDrawer(new SpriteBatch(dispTileset.GraphicsDevice), selectorTileset);
         }
 
         private void Application_Idle(object sender, EventArgs e)
@@ -139,8 +163,6 @@ namespace Tiny_Tile_Editor.Form_Controls
             if (openFileDialog.ShowDialog() == DialogResult.OK)
             {
                 OpenMap(openFileDialog.FileName);
-
-                stepsSinceLastSave = 0;
             }
         }
 
@@ -164,9 +186,13 @@ namespace Tiny_Tile_Editor.Form_Controls
 
         private void LoadTileset(string filename)
         {
-            Console.WriteLine(dispTileset.Enabled);
+            if (AskSaveMap() == DialogResult.Cancel)
+                return;
 
-            map.TilesetTexture = Texture2D.FromStream(spriteBatch.GraphicsDevice, new StreamReader(filename).BaseStream);
+            selectorMarquee.Reset();
+            selectorTileset.Reset();
+
+            map.TilesetTexture = Texture2D.FromStream(dispTileset.GraphicsDevice, new StreamReader(filename).BaseStream);
 
             hscTileset.Maximum = map.TilesetTexture.Width;
             vscTileset.Maximum = map.TilesetTexture.Height;
@@ -180,7 +206,7 @@ namespace Tiny_Tile_Editor.Form_Controls
             for (int i = 0; i < numLayers.Value; i++)
                 map.TileLayers.Add(new TileLayer(map.TilesetTexture, layerWidth, layerHeight, tileSize));
 
-            map.CollisionLayer = new TileLayer(map.TilesetTexture, layerWidth, layerHeight, tileSize);
+            map.CustomLayer = new TileLayer(map.TilesetTexture, layerWidth, layerHeight, tileSize);
 
             hscMap.Maximum = map.WidthInPixels;
             vscMap.Maximum = map.HeightInPixels;
@@ -230,7 +256,7 @@ namespace Tiny_Tile_Editor.Form_Controls
 
             try
             {
-                mapReader.Read(filename, map);
+                mapReader.Read(filename, map, tileTypes);
             }
             catch (Exception e)
             {
@@ -244,6 +270,8 @@ namespace Tiny_Tile_Editor.Form_Controls
 
         private void ResetForm(string filename)
         {
+            ClearUndoRedoStack();
+
             stepsSinceLastSave = 0;
 
             Text = string.Format("{0} - {1}", Resources.ApplicationName, Path.GetFileName(filename));
@@ -278,7 +306,7 @@ namespace Tiny_Tile_Editor.Form_Controls
             {
                 if (saveFileDialog.ShowDialog() == DialogResult.OK)
                 {
-                    mapWriter.Write(saveFileDialog.FileName, map);
+                    mapWriter.Write(saveFileDialog.FileName, map, tileTypes);
 
                     Text = string.Format("{0} - {1}", Resources.ApplicationName, Path.GetFileName(saveFileDialog.FileName));
                     currentFilename = saveFileDialog.FileName;
@@ -289,7 +317,7 @@ namespace Tiny_Tile_Editor.Form_Controls
             else
             {
                 if (File.Exists(currentFilename))
-                    mapWriter.Write(currentFilename, map);
+                    mapWriter.Write(currentFilename, map, tileTypes);
                 else
                     SaveMap(true);
             }
@@ -306,6 +334,8 @@ namespace Tiny_Tile_Editor.Form_Controls
 
             undoToolStripMenuItem.Enabled = false;
             redoToolStripMenuItem.Enabled = false;
+
+            tspTileTypes.SelectedIndex = 0;
         }
 
         private void EnableMenu()
@@ -339,7 +369,7 @@ namespace Tiny_Tile_Editor.Form_Controls
         {
             PushUndoStack();
 
-            map.CollisionLayer.Clear();
+            map.CustomLayer.Clear();
         }
 
         private void clearMapToolStripMenuItem_Click(object sender, EventArgs e)
@@ -409,9 +439,6 @@ namespace Tiny_Tile_Editor.Form_Controls
                 case Keys.E:
                     tspTool_Click(tspMarquee, EventArgs.Empty);
                     break;
-                case Keys.R:
-                    tspCollision.Checked = !tspCollision.Checked;
-                    break;
                 case Keys.A:
                     tspLayerDown_Click(tspLayerDown, EventArgs.Empty);
                     break;
@@ -423,7 +450,7 @@ namespace Tiny_Tile_Editor.Form_Controls
 
         protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
         {
-            if (tilesetLoaded)
+            if (tilesetLoaded && !tspTileTypes.Focused)
                 HandleToolStripHotkey(keyData);
 
             return base.ProcessCmdKey(ref msg, keyData);
@@ -435,83 +462,23 @@ namespace Tiny_Tile_Editor.Form_Controls
 
         private void dispMap_OnDraw(object sender, EventArgs e)
         {
-            Vector3 previewCamera = new Vector3(-hscMap.Value, -vscMap.Value, 0f);
+            int viewWidth = tilesetLoaded ? Math.Min(dispMap.Width, map.WidthInPixels) : dispMap.Width;
+            int viewHeight = tilesetLoaded ? Math.Min(dispMap.Height, map.HeightInPixels) : dispMap.Height;
 
-            spriteBatch.Begin(SpriteSortMode.Deferred, BlendState.AlphaBlend, null, null, null, null, Matrix.CreateTranslation(previewCamera));
+            Rectangle toolPreviewRect = dragFilename == string.Empty && mouseInMapDisplay ? currentTool.PreviewRect : Rectangle.Empty;
+            Rectangle viewingRectangle = new Rectangle(hscMap.Value, vscMap.Value, viewWidth, viewHeight);
 
-            spriteBatch.GraphicsDevice.Clear(displayClearColor);
-
-            if (tilesetLoaded)
-            {
-                DrawLayersWithToolPreviews();
-
-                if (showMapGridToolStripMenuItem.Checked)
-                    DrawGrid(hscMap.Value, vscMap.Value, Math.Min(dispMap.Width, map.WidthInPixels), Math.Min(dispMap.Height, map.HeightInPixels), Color.Black);
-            }
-
-            spriteBatch.End();
+            displayDrawer.DrawMap(map, currentTool, toolPreviewRect, viewingRectangle, tileTypes[tileTypesComboBox.SelectedIndex], showOtherLayersToolStripMenuItem.Checked, showCollisionLayerToolStripMenuItem.Checked, showMapGridToolStripMenuItem.Checked, tilesetLoaded);
         }
 
         private void dispTileset_OnDraw(object sender, EventArgs e)
         {
-            Vector3 tilesetCamera = new Vector3(-hscTileset.Value, -vscTileset.Value, 0f);
+            int viewWidth = tilesetLoaded ? Math.Min(dispTileset.Width, map.TilesetTexture.Width) : dispTileset.Width;
+            int viewHeight = tilesetLoaded ? Math.Min(dispTileset.Height, map.TilesetTexture.Height) : dispTileset.Height;
 
-            spriteBatch.Begin(SpriteSortMode.Immediate, BlendState.AlphaBlend, null, null, null, null, Matrix.CreateTranslation(tilesetCamera));
+            Rectangle viewingRectangle = new Rectangle(hscTileset.Value, vscTileset.Value, viewWidth, viewHeight);
 
-            spriteBatch.GraphicsDevice.Clear(displayClearColor);
-
-            if (tilesetLoaded)
-            {
-                spriteBatch.Draw(map.TilesetTexture, Vector2.Zero, Color.White);
-
-                if (showTilesetGridToolStripMenuItem.Checked)
-                    DrawGrid(hscTileset.Value, vscTileset.Value, Math.Min(dispTileset.Width, map.TilesetTexture.Width - 64), Math.Min(dispTileset.Height, map.TilesetTexture.Height - 64), Color.Black);
-
-                Utility.DrawRectangle(spriteBatch, 3, selectorTileset.Rectangle, Color.Red); // Tileset selector border
-            }
-
-            spriteBatch.End();
-        }
-
-        private void DrawGrid(int xOrigin, int yOrigin, int columnCount, int rowCount, Color tint)
-        {
-            for (int x = xOrigin; x < columnCount + xOrigin; x += map.TileSize)
-                for (int y = yOrigin; y < rowCount + yOrigin; y += map.TileSize)
-                    Utility.DrawRectangle(spriteBatch, 1, new Rectangle(x / map.TileSize * map.TileSize, y / map.TileSize * map.TileSize, map.TileSize, map.TileSize), tint);
-        }
-
-        private void DrawLayersWithToolPreviews()
-        {
-            Rectangle previewRect = dragFilename == string.Empty ? currentTool.PreviewRect : Rectangle.Empty;
-
-            Rectangle currentViewingRectangle = new Rectangle(hscMap.Value / map.TileSize, vscMap.Value / map.TileSize, dispMap.Width / map.TileSize + 3, dispMap.Height / map.TileSize + 3); // Draw a couple more just in case
-
-            foreach (TileLayer layer in map.TileLayers)
-            {
-                bool isLayerActive = map.ActiveLayerIndex == map.TileLayers.IndexOf(layer);
-
-                if (isLayerActive)
-                {
-                    if (!tspCollision.Checked && mouseInMapDisplay)
-                        currentTool.DrawRegularPreview(spriteBatch, map.TilesetTexture, previewRect, selectorTileset.Rectangle);
-
-                    layer.Draw(spriteBatch, previewRect, !tspCollision.Checked, currentViewingRectangle); // Draws the layer and skips tiles covered by the tool preview
-                }
-                else
-                {
-                    if (showOtherLayersToolStripMenuItem.Checked)
-                        layer.Draw(spriteBatch, currentViewingRectangle);
-                }
-            }
-
-            if (tspCollision.Checked && mouseInMapDisplay)
-                currentTool.DrawCollisionPreview(spriteBatch, previewRect);
-
-            if (showCollisionLayerToolStripMenuItem.Checked)
-                map.CollisionLayer.Draw(spriteBatch, previewRect, tspCollision.Checked, currentViewingRectangle); // Draw the collision layer and skip tiles that are covered by the tool preview
-
-            if (dragFilename == string.Empty && mouseInMapDisplay)
-                Utility.DrawRectangle(spriteBatch, 3, previewRect, Color.Orange); // Draw border around selector
+            displayDrawer.DrawTileset(map, viewingRectangle, showTilesetGridToolStripMenuItem.Checked, tilesetLoaded);
         }
 
         #endregion
@@ -566,7 +533,7 @@ namespace Tiny_Tile_Editor.Form_Controls
             UseTool(e);
         }
 
-        private void dispMap_MouseUp(object sender, MouseEventArgs e) // i know mouseup is broken. currently it always paints and never erases
+        private void dispMap_MouseUp(object sender, MouseEventArgs e)
         {
             if (!tilesetLoaded || (e.Button != MouseButtons.Left && e.Button != MouseButtons.Right))
                 return;
@@ -593,12 +560,19 @@ namespace Tiny_Tile_Editor.Form_Controls
 
         private void PaintWithTool()
         {
-            Tile.Type tileType = tspCollision.Checked ? Tile.Type.Collision : Tile.Type.Regular;
+            TileType tileType = new TileType(TileType.DefaultName, 1);
+
+            if (tileTypesComboBox.SelectedIndex > 0)
+            {
+                tileType = new TileType(tileTypes[tileTypesComboBox.SelectedIndex]);
+            }
 
             if (Tool.PaintType == Tool.PaintingType.Erasing)
-                tileType = Tile.Type.Empty;
+            {
+                tileType.Identifier = 0;
+            }
 
-            currentTool.Use(tspCollision.Checked ? map.CollisionLayer : map.ActiveLayer, Tool.Position.X / map.TileSize, Tool.Position.Y / map.TileSize, selectorTileset.Rectangle, tileType);
+            currentTool.Use(tileTypesComboBox.SelectedIndex == 0 ? map.ActiveLayer : map.CustomLayer, Tool.Position.X / map.TileSize, Tool.Position.Y / map.TileSize, selectorTileset.Rectangle, tileType);
         }
 
         private bool PaintingConditionsMet(MouseEventArgs e, int xOffset, int yOffset, int xBoundary, int yBoundary)
@@ -640,11 +614,11 @@ namespace Tiny_Tile_Editor.Form_Controls
             }
         }
 
-        private void ScrollDisplay(ScrollBar hsc, ScrollBar vsc, int delta)
+        private static void ScrollDisplay(ScrollBar hsc, ScrollBar vsc, int delta)
         {
             ScrollBar scr = Microsoft.Xna.Framework.Input.Keyboard.GetState().IsKeyDown(Microsoft.Xna.Framework.Input.Keys.LeftShift) ? hsc : vsc;
 
-            int scrollAmount = 32;
+            const int scrollAmount = 32;
 
             scr.Value = delta > 0 ? Math.Max(0, scr.Value - scrollAmount) : Math.Min(scr.Maximum - scr.LargeChange + 1, scr.Value + scrollAmount);
         }
@@ -786,6 +760,8 @@ namespace Tiny_Tile_Editor.Form_Controls
 
             map = edit.Undo(map);
 
+            tileTypes = map.TileTypes;
+
             redoStack.Push(edit);
 
             stepsSinceLastSave--;
@@ -805,6 +781,8 @@ namespace Tiny_Tile_Editor.Form_Controls
             Edit edit = redoStack.Pop();
 
             map = edit.Redo();
+
+            tileTypes = map.TileTypes;
 
             undoStack.Push(edit);
 
@@ -884,8 +862,6 @@ namespace Tiny_Tile_Editor.Form_Controls
 
         #region Drag And Drop Support
 
-        string dragFilename = string.Empty;
-
         private void GetDragData(DragEventArgs e)
         {
             string[] draggedFilenames = (string[])e.Data.GetData(DataFormats.FileDrop);
@@ -936,5 +912,24 @@ namespace Tiny_Tile_Editor.Form_Controls
         }
 
         #endregion
+
+        private void editTileTypesToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            using (EditTileTypesForm form = new EditTileTypesForm(map.CustomLayer, tileTypes))
+            {
+                form.TileTypeChanged += form_TileTypeChanged;
+
+                form.ShowDialog();
+
+                tileTypesComboBox.DataSource = null;
+
+                tileTypesComboBox.DataSource = tileTypes; // Forces the ComboBox to update
+            }
+        }
+
+        private void form_TileTypeChanged()
+        {
+            PushUndoStack();
+        }
     }
 }

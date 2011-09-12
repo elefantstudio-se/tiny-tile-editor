@@ -16,14 +16,16 @@
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
+using Tiny_Tile_Editor.Tiles;
+
 namespace Tiny_Tile_Editor.Tools
 {
     public abstract class Tool
     {
-        public abstract void Use(TileLayer layer, int tileX, int tileY, Rectangle selectorRect, Tile.Type tileType);
+        public abstract void Use(TileLayer layer, int tileX, int tileY, Rectangle selectorRect, TileType tileType);
 
-        public abstract void DrawRegularPreview(SpriteBatch spriteBatch, Texture2D tilesetTexture, Rectangle previewRect, Rectangle selectorRect);
-        public abstract void DrawCollisionPreview(SpriteBatch spriteBatch, Rectangle previewRect);
+        public abstract void DrawRegularTilePreview(SpriteBatch spriteBatch, Texture2D tilesetTexture, Rectangle previewRect, Rectangle selectorRect);
+        public abstract void DrawCustomTilePreview(SpriteBatch spriteBatch, Rectangle previewRect, TileType tileType);
 
         public enum PaintingType
         {
@@ -35,7 +37,7 @@ namespace Tiny_Tile_Editor.Tools
         public static Point Position = Point.Zero;
         public static PaintingType PaintType = PaintingType.None;
 
-        public void PaintArea(TileLayer layer, int tileX, int tileY, Rectangle selectorRect, Tile.Type tileType)
+        public void PaintArea(TileLayer layer, int tileX, int tileY, Rectangle selectorRect, TileType tileType)
         {
             int selectorTileWidth = selectorRect.Width / layer.TileSize;
             int selectorTileHeight = selectorRect.Height / layer.TileSize;
@@ -44,13 +46,15 @@ namespace Tiny_Tile_Editor.Tools
             {
                 for (int y = 0; y < selectorTileHeight; y++)
                 {
-                    Tile replacementTile = new Tile(new Rectangle(selectorRect.X + (x * layer.TileSize), selectorRect.Y + (y * layer.TileSize), layer.TileSize, layer.TileSize), tileType);
+                    Rectangle tileRect = new Rectangle(selectorRect.X + (x * layer.TileSize), selectorRect.Y + (y * layer.TileSize), layer.TileSize, layer.TileSize);
+
+                    Tile replacementTile = TileFactory.Get(tileType, tileRect, layer.TilesetTileWidth);
 
                     bool inBounds = tileX + x >= 0 && tileY + y >= 0 && tileX + x < layer.Width && tileY + y < layer.Height;
 
                     if (inBounds)
                     {
-                        if (layer.GetTile(tileX + x, tileY + y) == replacementTile)
+                        if (layer.GetTile(tileX + x, tileY + y).Value == replacementTile.Value)
                             continue;
 
                         layer.SetTile(tileX + x, tileY + y, replacementTile);

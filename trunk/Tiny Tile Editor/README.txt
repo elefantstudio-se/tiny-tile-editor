@@ -56,5 +56,13 @@
   Changelog
   --------
 
+     o Version 2.0
+       - Added support for custom tile types (Edit -> Edit Tile Types)
+       - Refactored a lot of code.
+       - Switched from switches to polymorphism for tile types.
+       - Changed file format of map.
+         - Changed collision layer to custom layer.
+         - Added a keys section for custom tile types.
+
      o Version 1.0
        - Project released.

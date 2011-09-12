@@ -15,12 +15,13 @@
 
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Tiny_Tile_Editor.Tiles;
 
 namespace Tiny_Tile_Editor.Tools
 {
     class Fill : Tool
     {
-        public override void Use(TileLayer layer, int tileX, int tileY, Rectangle selectorRect, Tile.Type tileType)
+        public override void Use(TileLayer layer, int tileX, int tileY, Rectangle selectorRect, TileType tileType)
         {
             int tileWidth = selectorRect.Width / layer.TileSize;
             int tileHeight = selectorRect.Height / layer.TileSize;
@@ -30,12 +31,12 @@ namespace Tiny_Tile_Editor.Tools
                     PaintArea(layer, x, y, selectorRect, tileType);
         }
 
-        public override void DrawRegularPreview(SpriteBatch spriteBatch, Texture2D tilesetTexture, Rectangle previewRect, Rectangle selectorRect)
+        public override void DrawRegularTilePreview(SpriteBatch spriteBatch, Texture2D tilesetTexture, Rectangle previewRect, Rectangle selectorRect)
         {
             // The fill tool has no preview
         }
 
-        public override void DrawCollisionPreview(SpriteBatch spriteBatch, Rectangle previewRect)
+        public override void DrawCustomTilePreview(SpriteBatch spriteBatch, Rectangle previewRect, TileType tileType)
         {
             // The fill tool has no preview
         }

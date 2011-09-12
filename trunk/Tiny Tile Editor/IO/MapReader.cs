@@ -14,10 +14,14 @@
 //    along with Tiny Tile Editor.  If not, see <http://www.gnu.org/licenses/>.
 
 using System;
+using System.Linq;
 using System.Xml.Linq;
 using System.Collections.Generic;
+using System.ComponentModel;
 
 using Microsoft.Xna.Framework;
+
+using Tiny_Tile_Editor.Tiles;
 
 namespace Tiny_Tile_Editor.IO
 {
@@ -26,9 +30,10 @@ namespace Tiny_Tile_Editor.IO
         private const char tileSeparator = ',';
 
         private Map map;
+        private BindingList<TileType> tileTypes;
 
         private List<Tile[,]> tileLayers = new List<Tile[,]>();
-        private Tile[,] collisionLayer;
+        private Tile[,] customLayer;
 
         private MapDimensions mapDimensions;
 
@@ -37,9 +42,10 @@ namespace Tiny_Tile_Editor.IO
             public int Width, Height, TileSize, LayerCount;
         }
 
-        public void Read(string filename, Map map)
+        public void Read(string filename, Map map, BindingList<TileType> tileTypes)
         {
             this.map = map;
+            this.tileTypes = tileTypes;
 
             XDocument xReader = XDocument.Load(filename);
 
@@ -47,12 +53,14 @@ namespace Tiny_Tile_Editor.IO
 
             InitializeMap();
 
+            ParseKeys(xReader);
+
             ParseLayout(xReader);
 
             WriteToLayers();
         }
 
-        private void ParseDimensions(XDocument xReader)
+        private void ParseDimensions(XContainer xReader)
         {
             IEnumerable<XElement> dimensions = xReader.Descendants("Dimensions").Elements();
 
@@ -90,10 +98,52 @@ namespace Tiny_Tile_Editor.IO
                 tileLayers.Add(new Tile[mapDimensions.Height, mapDimensions.Width]);
             }
 
-            collisionLayer = new Tile[mapDimensions.Height, mapDimensions.Width];
+            customLayer = new Tile[mapDimensions.Height, mapDimensions.Width];
         }
 
-        private void ParseLayout(XDocument xReader)
+        private void ParseKeys(XDocument xReader)
+        {
+            BindingList<TileType> tempTileTypes = new BindingList<TileType>();
+
+            IEnumerable<XElement> keys = xReader.Descendants("CustomLayerKeys").Elements();
+
+            foreach (XElement key in keys)
+            {
+                XAttribute keyNameAttribute = key.Attribute("Name");
+                XAttribute keyIdentifierAttribute = key.Attribute("Identifier");
+                XAttribute keyColorAttribute = key.Attribute("Color");
+
+                if (keyNameAttribute == null || keyIdentifierAttribute == null || keyColorAttribute == null)
+                    throw new FormatException("The map file could not be read because a key name, identifier, or color is malformed.");
+
+                string keyName = keyNameAttribute.Value;
+
+                int keyIdentifier;
+
+                if (!int.TryParse(keyIdentifierAttribute.Value, out keyIdentifier))
+                    throw new FormatException(string.Format("The map file could not be read because the key identifier {0} is malformed.", keyIdentifierAttribute.Value));
+
+                int keyColorARGB;
+
+                if (!int.TryParse(keyColorAttribute.Value, out keyColorARGB))
+                    throw new FormatException(string.Format("The map file could not be read because the key color {0} is malformed.", keyColorAttribute.Value));
+
+                var keyColor = System.Drawing.Color.FromArgb(keyColorARGB);
+
+                TileType tileType = new TileType(keyName, keyIdentifier, keyColor);
+
+                tempTileTypes.Add(tileType);
+            }
+
+            tileTypes.Clear();
+
+            foreach (TileType t in tempTileTypes)
+            {
+                tileTypes.Add(t);
+            }
+        }
+
+        private void ParseLayout(XContainer xReader)
         {
             IEnumerable<XElement> layout = xReader.Descendants("Layout").Elements();
 
@@ -140,13 +190,29 @@ namespace Tiny_Tile_Editor.IO
 
                 int ts = mapDimensions.TileSize;
 
-                Tile newTile = tileValue == -1 ? new Tile(Tile.Type.Empty) : new Tile(new Rectangle((tileValue % tilesetTileWidth) * ts, (tileValue / tilesetTileWidth) * ts, ts, ts), Tile.Type.Regular);
+                int tileX = (tileValue - 1) % tilesetTileWidth * ts;
+                int tileY = (tileValue - 1) / tilesetTileWidth * ts;
 
-                if (currentLayerIndex == -1 && tileValue == 0)
-                    newTile.TileType = Tile.Type.Collision;
+                Rectangle tileRect = new Rectangle(tileX, tileY, ts, ts);
+
+                TileType tileType = null;
+
+                if (currentLayerIndex != -1 && tileValue >= 0)
+                {
+                    tileType = new TileType(TileType.DefaultName, tileValue == 0 ? EmptyTile.Identifier : RegularTile.Identifier);
+                }
+                else
+                {
+                    foreach (TileType t in tileTypes.Where(t => t.Identifier == tileValue))
+                    {
+                        tileType = t;
+                    }
+                }
+
+                Tile newTile = TileFactory.Get(tileType, tileRect, tilesetTileWidth);
 
                 if (currentLayerIndex == -1)
-                    collisionLayer[y, x] = newTile;
+                    customLayer[y, x] = newTile;
                 else
                     tileLayers[currentLayerIndex][y, x] = newTile;
             }
@@ -167,9 +233,9 @@ namespace Tiny_Tile_Editor.IO
                 map.TileLayers[i].SetTiles(tileLayers[i]);
             }
 
-            map.CollisionLayer = new TileLayer(map.TilesetTexture, mapDimensions.Width, mapDimensions.Height, mapDimensions.TileSize);
+            map.CustomLayer = new TileLayer(map.TilesetTexture, mapDimensions.Width, mapDimensions.Height, mapDimensions.TileSize);
 
-            map.CollisionLayer.SetTiles(collisionLayer);
+            map.CustomLayer.SetTiles(customLayer);
         }
     }
 }

@@ -28,7 +28,7 @@ namespace Tiny_Tile_Editor
 
         public Map Redo()
         {
-            if (redoMap == null) throw new NullReferenceException("Redo layer is null.");
+            if (redoMap == null) throw new ArgumentNullException("Redo layer is null.");
 
             return redoMap;
         }

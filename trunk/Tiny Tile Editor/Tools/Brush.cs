@@ -17,31 +17,32 @@ using System;
 
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Tiny_Tile_Editor.Tiles;
 
 namespace Tiny_Tile_Editor.Tools
 {
     class Brush : Tool
     {
-        private Selection selectorTileset;
+        private readonly Selection selectorTileset;
 
         public Brush(Selection selectorTileset)
         {
             this.selectorTileset = selectorTileset;
         }
 
-        public override void Use(TileLayer layer, int tileX, int tileY, Rectangle selectorRect, Tile.Type tileType)
+        public override void Use(TileLayer layer, int tileX, int tileY, Rectangle selectorRect, TileType tileType)
         {
             PaintArea(layer, tileX, tileY, selectorRect, tileType);
         }
 
-        public override void DrawRegularPreview(SpriteBatch spriteBatch, Texture2D tilesetTexture, Rectangle previewRect, Rectangle selectorRect)
+        public override void DrawRegularTilePreview(SpriteBatch spriteBatch, Texture2D tilesetTexture, Rectangle previewRect, Rectangle selectorRect)
         {
             spriteBatch.Draw(tilesetTexture, previewRect, selectorRect, Color.White);
         }
 
-        public override void DrawCollisionPreview(SpriteBatch spriteBatch, Rectangle previewRect)
+        public override void DrawCustomTilePreview(SpriteBatch spriteBatch, Rectangle previewRect, TileType tileType)
         {
-            Utility.DrawRectangle(spriteBatch, previewRect, Tile.CollisionTileColor);
+            Utility.DrawCustomTile(spriteBatch, previewRect, tileType);
         }
 
         public override Rectangle PreviewRect

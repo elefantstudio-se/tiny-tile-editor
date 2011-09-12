@@ -14,6 +14,8 @@
 //    along with Tiny Tile Editor.  If not, see <http://www.gnu.org/licenses/>.
 
 using System.Xml;
+using System.Collections.Generic;
+using Tiny_Tile_Editor.Tiles;
 
 namespace Tiny_Tile_Editor.IO
 {
@@ -23,13 +25,12 @@ namespace Tiny_Tile_Editor.IO
 
         private Map map;
 
-        private int tilesetTileWidth;
+        private IEnumerable<TileType> tileTypes;
 
-        public void Write(string filename, Map map)
+        public void Write(string filename, Map map, IEnumerable<TileType> tileTypes)
         {
             this.map = map;
-
-            tilesetTileWidth = map.TilesetTexture.Width / map.TileSize;
+            this.tileTypes = tileTypes;
 
             using (XmlWriter writer = XmlWriter.Create(filename))
             {
@@ -37,6 +38,7 @@ namespace Tiny_Tile_Editor.IO
                 writer.WriteStartElement("Map");
 
                 WriteDimensions(writer);
+                WriteKeys(writer);
                 WriteLayout(writer);
 
                 writer.WriteEndElement();
@@ -73,8 +75,10 @@ namespace Tiny_Tile_Editor.IO
                 writer.WriteEndElement();
             }
 
-            writer.WriteStartElement("CollisionLayer");
-            WriteRows(writer, map.CollisionLayer);
+            writer.WriteStartElement("CustomLayer");
+
+            WriteRows(writer, map.CustomLayer);
+
             writer.WriteEndElement();
 
             writer.WriteEndElement();
@@ -90,29 +94,39 @@ namespace Tiny_Tile_Editor.IO
 
                 for (int x = 0; x < map.Width; x++)
                 {
-                    Tile tile = layer.GetTile(x, y);
-
-                    switch (tile.TileType)
-                    {
-                        case Tile.Type.Empty:
-                            row[x] = "-1";
-                            break;
-                        case Tile.Type.Collision:
-                            row[x] = "0";
-                            break;
-                        case Tile.Type.Regular:
-                            row[x] = (tile.Rectangle.Y / tile.Rectangle.Height * tilesetTileWidth + tile.Rectangle.X / tile.Rectangle.Width).ToString();
-                            break;
-                        default:
-                            row[x] = "-1";
-                            break;
-                    }                        
+                    row[x] = layer.GetTile(x, y).Value.ToString();                   
                 }
 
                 writer.WriteValue(string.Join(tileSeparator, row));
 
                 writer.WriteEndElement();
             }
+        }
+
+        private void WriteKeys(XmlWriter writer)
+        {
+            writer.WriteStartElement("CustomLayerKeys");
+
+            foreach (TileType tileType in tileTypes)
+            {
+                writer.WriteStartElement("Key");
+
+                writer.WriteStartAttribute("Name");
+                writer.WriteValue(tileType.Name);
+                writer.WriteEndAttribute();
+
+                writer.WriteStartAttribute("Identifier");
+                writer.WriteValue(tileType.Identifier);
+                writer.WriteEndAttribute();
+
+                writer.WriteStartAttribute("Color");
+                writer.WriteValue(tileType.Color.ToArgb());
+                writer.WriteEndAttribute();
+
+                writer.WriteEndElement();
+            }
+
+            writer.WriteEndElement();
         }
     }
 }
